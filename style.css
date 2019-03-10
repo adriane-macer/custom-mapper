@@ -1,0 +1,39 @@
+#map-canvas {
+  height: 100%;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#right-panel {
+  font-family: Arial, Helvetica, sans-serif;
+  position: absolute;
+  right: 5px;
+  bottom: 70%;
+  margin-top: -195px;
+  height: 50px;
+  width: 60px;
+  padding: 2px;
+  z-index: 5;
+  border: 1px solid #999;
+  background: #fff;
+}
+
+#search{
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%
+  border: 1px solid #999;
+  background: #ffd;
+}
+
+#clear{
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%
+  border: 1px solid #999;
+  background: #ffd;
+}
+
