@@ -1,8 +1,9 @@
 var map;
 var service, infoWindow;
 var currentMarker;
-var directionsDisplay;
 var directionsService;
+var directionsDisplay;
+
 
 // List 
 var List = (function() {
@@ -61,8 +62,10 @@ List.create = function(params) {
 var Mapper = (function() {
   //Mapper Class
   function Mapper(element, opts) {
+  	self = this;
     this.gMap = new google.maps.Map(element, opts);
     this.markers = List.create();
+    this.markerClusterer = new MarkerClusterer(this.gMap, [],{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
   }
 
   //Mapper prototype
@@ -89,6 +92,7 @@ var Mapper = (function() {
       marker = this._createMarker(opts);
 
       this.markers.add(marker);
+      this.markerClusterer.addMarker(marker);
       if (opts.event) {
         this._on({
           obj: marker,
@@ -154,30 +158,36 @@ function initMap() {
 
   map = new Mapper(element, options);
 
-  var searchFields = {
-    location: pos,
-    radius: 500,
-    types: ['restaurant']
-  }
-
   $("#search").click(function() {
     map.clear();
-    search(searchFields);
+    if (directionsDisplay) {
+      directionsDisplay.setMap(null);
+    }
+    search();
   });
 
   $("#clear").click(function() {
     map.clear();
+    if (directionsDisplay) {
+      directionsDisplay.setMap(null);
+    }
+    if(currentMarker){
+    	//just remove the current marker
+    	currentMarker.setMap(null);
+    }
   });
 
   $("#current-loc").click(function() {
 
     getCurrentLocation();
+    
   });
+ 
 }
 
 function getCurrentLocation() {
 
-  infoWindow = new google.maps.InfoWindow();
+  //infoWindow = new google.maps.InfoWindow();
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -195,9 +205,9 @@ function getCurrentLocation() {
       opts.title = pos.lat + " , " + pos.lng;
       opts.content = opts.title;
 
-      infoWindow.setPosition(pos);
-      infoWindow.setContent('<div><strong>Current location</strong></div>' + opts.content);
-      infoWindow.open(map.gMap);
+      //infoWindow.setPosition(pos);
+      //infoWindow.setContent('<div><strong>Current location</strong></div>' + opts.content);
+      //infoWindow.open(map.gMap);
       map.gMap.setCenter(pos);
       //place current Location Marker
       if (!currentMarker) {
@@ -224,7 +234,16 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
 }
 
-function search(searchFields) {
+function search() {
+
+	getCurrentLocation();
+
+  var searchFields = {
+    location: currentMarker.position,
+    radius: 500,
+    types: ['restaurant']
+  }
+  
   // Create the places service.
   service = new google.maps.places.PlacesService(map.gMap);
   // start search
@@ -275,10 +294,15 @@ function createMarkers(places) {
 
 // direction
 function getDirection(target) {
-  directionsDisplay = new google.maps.DirectionsRenderer;
-  directionsService = new google.maps.DirectionsService;
+
+  if (directionsDisplay) {
+    directionsDisplay.setMap(null);
+  }
+  directionsDisplay = new google.maps.DirectionsRenderer();
+  directionsService = new google.maps.DirectionsService();
 
   directionsDisplay.setMap(map.gMap);
+
   directionsDisplay.setPanel(document.getElementById('right-panel'));
   var control = document.getElementById('floating-panel');
   control.style.display = 'block';
