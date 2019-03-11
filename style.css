@@ -13,10 +13,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   position: absolute;
   left: 5%;
-  bottom: 70%;
+  bottom: 50%;
   margin-top: -195px;
-  height: 45px;
-  width: 70px;
+  height: 75px;
+  width: 90px;
   padding: 2px;
   z-index: 5;
   border: 1px solid #999;
@@ -30,6 +30,12 @@ body {
 }
 
 #clear {
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100% border: 1px solid #999;
+  background: #ffd;
+}
+
+#current-loc {
   font-family: Arial, Helvetica, sans-serif;
   width: 100% border: 1px solid #999;
   background: #ffd;
