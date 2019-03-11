@@ -281,7 +281,7 @@ function getDirection(target) {
   directionsDisplay.setMap(map.gMap);
   directionsDisplay.setPanel(document.getElementById('right-panel'));
   var control = document.getElementById('floating-panel');
-  //control.style.display = 'block';
+  control.style.display = 'block';
 
   map.gMap.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
 

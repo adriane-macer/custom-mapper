@@ -81,6 +81,10 @@ body {
   overflow: auto;
 }
 
+#map-canvas{  
+  margin-right: 400px;
+}
+
 #floating-panel {
   background: #fff;
   padding: 5px;
@@ -92,7 +96,7 @@ body {
 }
 
 @media print {
-  #map {
+  #map-canvas {
     height: 500px;
     margin: 0;
   }
