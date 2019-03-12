@@ -62,7 +62,6 @@ List.create = function(params) {
 var Mapper = (function() {
   //Mapper Class
   function Mapper(element, opts) {
-  	self = this;
     this.gMap = new google.maps.Map(element, opts);
     this.markers = List.create();
     this.markerClusterer = new MarkerClusterer(this.gMap, [],{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
@@ -133,6 +132,7 @@ var Mapper = (function() {
     },
     clear: function() {
       this.markers.clear();
+      this.markerClusterer.clearMarkers();
     }
   };
   return Mapper;
@@ -140,6 +140,8 @@ var Mapper = (function() {
 
 
 function initMap() {
+
+	initialize();
   // Create the map.
   var pos = { //10.315638,123.892542 provincial capitol
     lat: 10.315638,
@@ -159,6 +161,8 @@ function initMap() {
   map = new Mapper(element, options);
 
   $("#search").click(function() {
+    $("#right-panel").hide();
+    $("#right-panel").empty();
     map.clear();
     if (directionsDisplay) {
       directionsDisplay.setMap(null);
@@ -167,7 +171,9 @@ function initMap() {
   });
 
   $("#clear").click(function() {
-    map.clear();
+    map.clear();    
+    $("#right-panel").hide();
+    $("#right-panel").empty();
     if (directionsDisplay) {
       directionsDisplay.setMap(null);
     }
@@ -270,6 +276,10 @@ function search() {
     });
 }
 
+function initialize(){
+	$("#right-panel").hide();
+}
+
 function createMarkers(places) {
   for (var i = 0, place; place = places[i]; i++) {
     var image = {
@@ -321,7 +331,8 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, target) 
     travelMode: 'DRIVING'
   }, function(response, status) {
     if (status === 'OK') {
-      directionsDisplay.setDirections(response);
+    
+ 				$("#right-panel").show();   directionsDisplay.setDirections(response);
     } else {
       window.alert('Directions request failed due to ' + status);
     }
